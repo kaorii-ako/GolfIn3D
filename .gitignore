@@ -3,3 +3,5 @@ __pycache__/
 build/
 dist/
 golfin3d/models/
+.vercel
+.env*
