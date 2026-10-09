@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GolfIn3D: two-camera swing capture with 3D pose</title>
+<meta name="description" content="Two cameras and your Foresight GC3. GolfIn3D captures every shot, tracks the body, and rebuilds the swing in 3D. Free for Windows, macOS and Linux.">
+<meta name="theme-color" content="#0b0c0b">
+<meta property="og:title" content="GolfIn3D">
+<meta property="og:description" content="Every swing, in three dimensions. Two-camera capture, 2D and 3D pose, synced to your launch monitor.">
+<meta property="og:image" content="img/shot-swing.png">
+<link rel="icon" href="img/favicon.png">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource-variable/geist@5/index.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource-variable/geist-mono@5/index.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="nav">
+  <div class="wrap nav-row">
+    <a class="brand" href="#top" aria-label="GolfIn3D home">
+      <img src="img/mark.svg" alt="" width="28" height="28">
+      <span>GolfIn3D</span>
+    </a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="#features">Features</a>
+      <a href="#how">How it works</a>
+      <a href="#limits">Limits</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <div class="nav-end">
+      <a class="icon-link" href="https://github.com/kaorii-ako/GolfIn3D" aria-label="Source on GitHub"><i class="ph ph-github-logo"></i></a>
+      <a class="btn btn-sm btn-primary" href="#download">Download</a>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <section class="hero" id="top">
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <h1>Every swing, in three dimensions.</h1>
+        <p class="lede">Two cameras and your Foresight GC3. GolfIn3D captures each shot, tracks the body, and rebuilds the swing in 3D.</p>
+        <div class="cta-row">
+          <a class="btn btn-primary btn-lg" id="hero-dl" href="#download"><i class="ph ph-download-simple"></i><span>Download</span></a>
+          <a class="btn btn-ghost btn-lg" href="https://github.com/kaorii-ako/GolfIn3D"><i class="ph ph-github-logo"></i><span>View source</span></a>
+        </div>
+      </div>
+      <figure class="stage" aria-label="Interactive 3D swing. Drag to orbit.">
+        <canvas id="swing3d"></canvas>
+        <div class="stage-hud">
+          <span id="hud-phase">Address</span>
+          <span class="hud-nums"><b id="hud-sh">0°</b> shoulders <b id="hud-hp">0°</b> hips</span>
+        </div>
+        <div class="stage-controls">
+          <button class="chip" id="play" aria-label="Pause"><i class="ph-fill ph-pause"></i></button>
+          <input id="scrub" type="range" min="0" max="1000" value="0" aria-label="Swing timeline">
+          <span class="hint"><i class="ph ph-hand-grabbing"></i> Drag to orbit</span>
+        </div>
+      </figure>
+    </div>
+  </section>
+
+  <section class="showcase" aria-label="App screenshot">
+    <div class="wrap">
+      <div class="window tilt">
+        <div class="window-bar"><span></span><span></span><span></span></div>
+        <img src="img/shot-swing.png" width="1600" height="960" alt="GolfIn3D swing view: face-on and down-the-line video with pose overlay, a 3D skeleton, launch monitor numbers and swing metrics.">
+      </div>
+      <p class="caption">The swing view, shown with a synthetic test swing.</p>
+    </div>
+  </section>
+
+  <section class="facts" aria-label="At a glance">
+    <div class="wrap facts-row">
+      <div><b>2</b><span>cameras, captured in sync</span></div>
+      <div><b>33</b><span>body landmarks tracked per frame</span></div>
+      <div><b>10</b><span>launch monitor values per shot</span></div>
+      <div><b>0</b><span>uploads. Everything runs on your PC</span></div>
+    </div>
+  </section>
+
+  <section class="features" id="features">
+    <div class="wrap">
+      <h2 class="reveal">Built for the hitting bay, not the lab.</h2>
+      <div class="bento">
+        <article class="cell cell-capture reveal">
+          <div class="cell-text">
+            <h3>Hit a ball. It's already saved.</h3>
+            <p>A mic hears impact to the millisecond. The GC3 adds ball speed, spin and launch a moment later. No buttons between shots.</p>
+          </div>
+          <div class="pulse" aria-hidden="true">
+            <div class="wave"></div>
+            <div class="pulse-row"><span>Impact</span><b>0 ms</b></div>
+            <div class="pulse-row"><span>Clip saved</span><b>2 s before, 1 s after</b></div>
+            <div class="pulse-row"><span>GC3 data attached</span><b>154.6 mph</b></div>
+          </div>
+        </article>
+        <article class="cell cell-3d reveal">
+          <img src="img/shot-compare.png" alt="Compare view with two swings side by side and both 3D skeletons overlaid." loading="lazy">
+          <div class="cell-text">
+            <h3>Compare two swings, frame for frame.</h3>
+            <p>Line them up at impact, top or address. Ghost one skeleton over the other and see every metric change.</p>
+          </div>
+        </article>
+        <article class="cell cell-stereo reveal">
+          <i class="ph ph-cube cell-icon"></i>
+          <h3>Stereo 3D, not a guess.</h3>
+          <p>Calibrate once with a printed checkerboard. Both camera views are triangulated into real 3D joints.</p>
+        </article>
+        <article class="cell cell-metrics reveal">
+          <h3>The numbers coaches ask for.</h3>
+          <ul class="metric-list">
+            <li><span>Tempo</span><b>3.1 : 1</b></li>
+            <li><span>Shoulder turn</span><b>90°</b></li>
+            <li><span>Hip turn</span><b>44°</b></li>
+            <li><span>X-factor</span><b>46°</b></li>
+            <li><span>Posture loss</span><b>0.4°</b></li>
+            <li><span>Head sway</span><b>5% sh</b></li>
+          </ul>
+          <p class="fine">Example values.</p>
+        </article>
+        <article class="cell cell-draw reveal">
+          <i class="ph ph-pencil-ruler cell-icon"></i>
+          <h3>Mark it up.</h3>
+          <p>Lines, angles and circles on any frame. Step frame by frame, slow it to ⅛ speed, follow the hand path.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="how" id="how">
+    <div class="wrap">
+      <h2 class="reveal">Studio to swing view in an afternoon.</h2>
+      <ol class="flow">
+        <li class="reveal">
+          <i class="ph ph-video-camera"></i>
+          <h3>Plug in two cameras</h3>
+          <p>Any USB webcam works. One faces the golfer, one sits down the line facing the screen.</p>
+        </li>
+        <li class="reveal">
+          <i class="ph ph-plugs-connected"></i>
+          <h3>Connect the GC3</h3>
+          <p>Turn on FSX Play's GSPro connection and point it at GolfIn3D. Shot data flows in automatically.</p>
+        </li>
+        <li class="reveal">
+          <i class="ph ph-crosshair"></i>
+          <h3>Calibrate once</h3>
+          <p>Wave a printed checkerboard through the bay for a minute. Redo it only if a camera moves.</p>
+        </li>
+        <li class="reveal">
+          <i class="ph ph-golf"></i>
+          <h3>Hit balls</h3>
+          <p>Every swing lands in your library with video, skeleton, 3D and metrics, ready to review.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="setup-shot">
+    <div class="wrap setup-grid">
+      <img class="reveal" src="img/shot-setup.png" alt="GolfIn3D setup screen with cameras, Foresight GC3, impact microphone, capture and calibration settings." loading="lazy">
+      <div class="reveal">
+        <h2>One settings page. No config files.</h2>
+        <p>Pick cameras, set the mic sensitivity with a live meter, choose how much of the swing to keep, and calibrate. Settings stick between sessions.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="limits" id="limits">
+    <div class="wrap">
+      <h2 class="reveal">What it doesn't do yet, stated plainly.</h2>
+      <div class="limits-grid">
+        <div class="reveal">
+          <h3>Installers are unsigned</h3>
+          <p>Windows SmartScreen and macOS Gatekeeper will warn on first launch. The download section shows how to open it anyway.</p>
+        </div>
+        <div class="reveal">
+          <h3>Body only, no club tracking</h3>
+          <p>The skeleton covers head to ankles. Club path and face come from the GC3, not the video.</p>
+        </div>
+        <div class="reveal">
+          <h3>Pose runs on the CPU</h3>
+          <p>A three-second, two-camera clip at 120 fps takes about 10 to 20 seconds to analyse. The video is ready to watch instantly.</p>
+        </div>
+        <div class="reveal">
+          <h3>Webcam-level sync</h3>
+          <p>Frames are timestamped on arrival. Fine for coaching, not for sub-millisecond biomechanics research.</p>
+        </div>
+        <div class="reveal">
+          <h3>macOS build is Apple silicon</h3>
+          <p>Intel Macs can run from source. Port 921 needs admin rights on macOS and Linux.</p>
+        </div>
+        <div class="reveal">
+          <h3>Tested synthetically so far</h3>
+          <p>The capture, 3D and metrics pipeline is verified on generated swings. Real-studio tuning is ongoing.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="download" id="download">
+    <div class="wrap">
+      <h2 class="reveal">Download GolfIn3D</h2>
+      <p class="sub reveal">Free. Version <span id="ver">0.1.0</span>. Runs fully offline after the first launch.</p>
+      <div class="tabs reveal" role="tablist" aria-label="Operating system">
+        <button role="tab" id="tab-win" aria-controls="pane-win" aria-selected="true"><i class="ph ph-windows-logo"></i> Windows</button>
+        <button role="tab" id="tab-mac" aria-controls="pane-mac" aria-selected="false"><i class="ph ph-apple-logo"></i> macOS</button>
+        <button role="tab" id="tab-linux" aria-controls="pane-linux" aria-selected="false"><i class="ph ph-linux-logo"></i> Linux</button>
+        <button role="tab" id="tab-src" aria-controls="pane-src" aria-selected="false"><i class="ph ph-code"></i> Source</button>
+      </div>
+      <div class="panes reveal">
+        <div class="pane" role="tabpanel" id="pane-win" aria-labelledby="tab-win">
+          <a class="btn btn-primary btn-lg" href="https://github.com/kaorii-ako/GolfIn3D/releases/latest/download/GolfIn3D-Setup-Windows-x64.exe"><i class="ph ph-download-simple"></i><span>Download for Windows</span></a>
+          <p class="file">GolfIn3D-Setup-Windows-x64.exe · Windows 10 or 11, 64-bit</p>
+          <ol class="steps">
+            <li>Run the installer. If SmartScreen appears, choose <b>More info</b>, then <b>Run anyway</b>.</li>
+            <li>The installer adds a firewall rule so FSX Play can reach GolfIn3D on your network.</li>
+            <li>Open <b>Setup</b> in the app and assign your two cameras.</li>
+          </ol>
+        </div>
+        <div class="pane" role="tabpanel" id="pane-mac" aria-labelledby="tab-mac" hidden>
+          <a class="btn btn-primary btn-lg" href="https://github.com/kaorii-ako/GolfIn3D/releases/latest/download/GolfIn3D-macOS-arm64.dmg"><i class="ph ph-download-simple"></i><span>Download for macOS</span></a>
+          <p class="file">GolfIn3D-macOS-arm64.dmg · macOS 13 or later, Apple silicon</p>
+          <ol class="steps">
+            <li>Open the disk image and drag GolfIn3D into Applications.</li>
+            <li>The first time, right-click the app and choose <b>Open</b>. If macOS still blocks it, open <b>System Settings</b>, then <b>Privacy &amp; Security</b>, and click <b>Open Anyway</b>.</li>
+            <li>Allow camera and microphone access when macOS asks.</li>
+          </ol>
+        </div>
+        <div class="pane" role="tabpanel" id="pane-linux" aria-labelledby="tab-linux" hidden>
+          <a class="btn btn-primary btn-lg" href="https://github.com/kaorii-ako/GolfIn3D/releases/latest/download/GolfIn3D-Linux-x86_64.AppImage"><i class="ph ph-download-simple"></i><span>Download for Linux</span></a>
+          <p class="file">GolfIn3D-Linux-x86_64.AppImage · x86_64, glibc 2.35 or newer</p>
+          <div class="code"><code>chmod +x GolfIn3D-Linux-x86_64.AppImage && ./GolfIn3D-Linux-x86_64.AppImage</code><button class="copy" aria-label="Copy command"><i class="ph ph-copy"></i></button></div>
+          <ol class="steps">
+            <li>For the impact mic, install PortAudio: <code>sudo apt install libportaudio2</code> or <code>sudo dnf install portaudio</code>.</li>
+            <li>Add yourself to the <code>video</code> group if cameras don't show up.</li>
+          </ol>
+        </div>
+        <div class="pane" role="tabpanel" id="pane-src" aria-labelledby="tab-src" hidden>
+          <div class="code"><code>git clone https://github.com/kaorii-ako/GolfIn3D && cd GolfIn3D && uv run python -m golfin3d</code><button class="copy" aria-label="Copy command"><i class="ph ph-copy"></i></button></div>
+          <ol class="steps">
+            <li>Needs <a href="https://docs.astral.sh/uv/">uv</a>. It fetches Python 3.12 and every dependency for you.</li>
+            <li>Works on Intel Macs and anything else PySide6 and MediaPipe support.</li>
+          </ol>
+        </div>
+      </div>
+      <p class="all-releases reveal"><a href="https://github.com/kaorii-ako/GolfIn3D/releases">All releases and checksums <i class="ph ph-arrow-up-right"></i></a></p>
+    </div>
+  </section>
+
+  <section class="faq" id="faq">
+    <div class="wrap faq-grid">
+      <h2 class="reveal">Questions</h2>
+      <div class="faq-list">
+        <details class="reveal"><summary>Does it work without a GC3?</summary><p>Yes. The impact microphone triggers capture on its own, and you can press C to save the last few seconds by hand. You just won't get ball and club numbers next to the swing.</p></details>
+        <details class="reveal"><summary>Which launch monitors are supported?</summary><p>Anything that can send shots over the GSPro OpenConnect protocol. That includes the Foresight GC3 through FSX Play, and many other monitors through their GSPro connectors.</p></details>
+        <details class="reveal"><summary>Can I keep using GSPro or FSX while it runs?</summary><p>FSX keeps running normally. GSPro can't listen on the same port at the same time, so run GolfIn3D on port 921 or GSPro, not both.</p></details>
+        <details class="reveal"><summary>What cameras should I buy?</summary><p>Any UVC USB camera works. For crisp impact frames, pick one that does 120 fps or more with a global shutter, and light the bay well.</p></details>
+        <details class="reveal"><summary>Where do my swings go?</summary><p>Into a GolfIn3D folder in your home directory: two video files, the pose data and a small JSON file per swing. Nothing leaves your computer.</p></details>
+        <details class="reveal"><summary>How accurate is the 3D?</summary><p>It depends mostly on calibration. Setup shows the reprojection error; under 1 px is good. Without calibration it falls back to single-camera 3D, which shows the shape of the swing but shouldn't be trusted for exact numbers.</p></details>
+        <details class="reveal"><summary>Is it free?</summary><p>Yes, and the source is on GitHub.</p></details>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="wrap footer-row">
+    <a class="brand" href="#top"><img src="img/mark.svg" alt="" width="24" height="24"><span>GolfIn3D</span></a>
+    <nav aria-label="Footer">
+      <a href="https://github.com/kaorii-ako/GolfIn3D">GitHub</a>
+      <a href="https://github.com/kaorii-ako/GolfIn3D/releases">Releases</a>
+      <a href="https://github.com/kaorii-ako/GolfIn3D/issues">Report an issue</a>
+    </nav>
+    <p class="fine">Not affiliated with Foresight Sports or GSPro.</p>
+  </div>
+</footer>
+
+<script src="app.js" defer></script>
+</body>
+</html>
