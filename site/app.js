@@ -40,6 +40,7 @@ function selectTab(i, focus) {
     t.tabIndex = on ? 0 : -1;
     document.getElementById(t.getAttribute("aria-controls")).hidden = !on;
   });
+  tablist.classList.toggle("instant", !!focus);
   tablist.style.setProperty("--i", i);
   if (focus) tabs[i].focus();
 }
@@ -57,8 +58,9 @@ document.querySelectorAll(".copy").forEach((b) =>
     try {
       await navigator.clipboard.writeText(b.previousElementSibling.textContent);
       b.classList.add("done");
-      b.innerHTML = '<i class="ph ph-check"></i>';
-      setTimeout(() => { b.classList.remove("done"); b.innerHTML = '<i class="ph ph-copy"></i>'; }, 1600);
+      b.innerHTML = '<i aria-hidden="true" class="ph ph-check"></i>';
+      document.getElementById("sr-status").textContent = "Copied to clipboard";
+      setTimeout(() => { b.classList.remove("done"); b.innerHTML = '<i aria-hidden="true" class="ph ph-copy"></i>'; }, 1600);
     } catch { /* clipboard blocked: the text is still selectable */ }
   })
 );
@@ -217,7 +219,8 @@ function draw() {
   ctx.strokeStyle = "rgba(242,244,241,0.92)"; ctx.lineWidth = 3;
   ctx.beginPath(); ctx.arc(S.head[0], S.head[1], hr, 0, 7); ctx.stroke();
 
-  hudPhase.textContent = phaseName(t);
+  const name = phaseName(t);
+  if (hudPhase.textContent !== name) { hudPhase.textContent = name; scrub.setAttribute("aria-valuetext", name); }
   hudSh.textContent = `${Math.round(sh)}°`;
   hudHp.textContent = `${Math.round(hp)}°`;
   const p = ((t - T0) / (T1 - T0)) * 100;
@@ -260,6 +263,13 @@ canvas.addEventListener("pointermove", (e) => {
   view.vy = dx; view.vp = dy;
 });
 const release = () => { grabbed = false; };
+// keyboard alternative to dragging: arrows nudge the orbit, momentum does the rest
+canvas.addEventListener("keydown", (e) => {
+  const k = { ArrowLeft: [-0.03, 0], ArrowRight: [0.03, 0], ArrowUp: [0, -0.02], ArrowDown: [0, 0.02] }[e.key];
+  if (!k) return;
+  e.preventDefault();
+  view.vy = k[0]; view.vp = k[1];
+});
 canvas.addEventListener("pointerup", release);
 canvas.addEventListener("pointercancel", release);
 
@@ -273,7 +283,7 @@ scrub.addEventListener("change", () => { dragging = false; });
 
 function setPlaying(on) {
   playing = on;
-  playBtn.innerHTML = on ? '<i class="ph-fill ph-pause"></i>' : '<i class="ph-fill ph-play"></i>';
+  playBtn.innerHTML = on ? '<i aria-hidden="true" class="ph-fill ph-pause"></i>' : '<i aria-hidden="true" class="ph-fill ph-play"></i>';
   playBtn.setAttribute("aria-label", on ? "Pause" : "Play");
 }
 playBtn.addEventListener("click", () => setPlaying(!playing));
