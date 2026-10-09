@@ -21,10 +21,10 @@ jobs:
             asset: dist/GolfIn3D-Linux-x86_64.AppImage
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: astral-sh/setup-uv@v5
+      - uses: actions/checkout@v5
+      - uses: astral-sh/setup-uv@v6
       - if: runner.os == 'Linux'
-        run: sudo apt-get update && sudo apt-get install -y libportaudio2 libegl1 libxkbcommon-x11-0 libxcb-cursor0
+        run: sudo apt-get update && sudo apt-get install -y libportaudio2 libegl1 libgles2 libxkbcommon-x11-0 libxcb-cursor0
       - run: uv sync --python 3.12
       - name: Self-checks
         run: |
