@@ -36,7 +36,7 @@ class Camera(threading.Thread):
         self.fps = 0.0
         self.size = (0, 0)
         self.error = None
-        self._stop = threading.Event()
+        self._halt = threading.Event()
         self._lock = threading.Lock()
 
     def run(self):
@@ -50,7 +50,7 @@ class Camera(threading.Thread):
         cap.set(cv2.CAP_PROP_FRAME_HEIGHT, h)
         cap.set(cv2.CAP_PROP_FPS, fps)
         stamps = deque(maxlen=60)
-        while not self._stop.is_set():
+        while not self._halt.is_set():
             ok, frame = cap.read()
             t = time.monotonic()
             if not ok:
@@ -73,7 +73,7 @@ class Camera(threading.Thread):
             return [(t, j) for t, j in self.buf if t0 <= t <= t1]
 
     def stop(self):
-        self._stop.set()
+        self._halt.set()
 
 
 def save_clip(path, frames, impact_t):

@@ -150,7 +150,7 @@ class LivePose(threading.Thread):
     def __init__(self, cam):
         super().__init__(daemon=True)
         self.cam, self.pts, self.on, self.error = cam, None, True, None
-        self._stop = threading.Event()
+        self._halt = threading.Event()
 
     def run(self):
         try:
@@ -159,7 +159,7 @@ class LivePose(threading.Thread):
             self.error = str(e)
             return
         last = None
-        while not self._stop.is_set():
+        while not self._halt.is_set():
             latest = self.cam.latest
             if not self.on or latest is None or latest[0] == last:
                 time.sleep(0.008)
@@ -172,7 +172,7 @@ class LivePose(threading.Thread):
         tr.close()
 
     def stop(self):
-        self._stop.set()
+        self._halt.set()
 
 
 # ---------------------------------------------------------------- small widgets
@@ -1315,6 +1315,10 @@ def selftest():
     p2, _ = tr(np.zeros((240, 320, 3), np.uint8), 0)
     tr.close()
     assert p2.shape == (33, 3)
+    cam = Camera(99)  # no such device: thread exits at once; join() must not raise (camera restart path)
+    cam.start()
+    cam.stop()
+    cam.join(2)
     if sys.stdout:  # windowed builds on Windows have no stdout
         print("selftest ok")
 
