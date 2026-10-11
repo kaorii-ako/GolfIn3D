@@ -13,7 +13,7 @@ uv sync --python 3.12
 uv run python -m golfin3d
 ```
 
-On first launch it downloads the MediaPipe pose models (~30 MB) into `~/GolfIn3D/models`. Swings are saved in `~/GolfIn3D/swings/<timestamp>/`. Each swing folder has `face.avi`, `dtl.avi`, `meta.json` and `pose.npz`.
+On first launch it downloads the MediaPipe pose models (~40 MB) into `~/GolfIn3D/models`. Swings are saved in `~/GolfIn3D/swings/<timestamp>/`. Each swing folder has `face.avi`, `dtl.avi`, `meta.json` and `pose.npz`.
 
 ## Studio setup
 
@@ -55,4 +55,4 @@ To build locally: put the two pose model files in `golfin3d/models/`, then run `
 
 - Port 921 is privileged on macOS and Linux. Run with admin rights, or change the port on both sides. FSX Play itself is Windows-only, so the usual setup is everything on the studio Windows PC.
 - Cameras are timestamped when each frame arrives. That's fine for plain USB webcams. For sub-millisecond sync you'd need hardware-triggered cameras.
-- Pose runs on the CPU. Analysing a 3-second, two-camera, 120 fps swing takes about 10 to 20 s, and the swing card shows *Analyzing…* until it's done.
+- Pose runs on the CPU. Analysing a 3-second, two-camera, 120 fps swing takes about 30 s with the most accurate (heavy) model, and the swing card shows *Analyzing…* until it's done.

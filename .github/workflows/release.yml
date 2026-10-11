@@ -34,7 +34,7 @@ jobs:
         shell: bash
         run: |
           mkdir -p golfin3d/models
-          for k in lite full; do
+          for k in full heavy; do
             curl -fsSL -o golfin3d/models/pose_landmarker_$k.task \
               https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_$k/float16/latest/pose_landmarker_$k.task
           done

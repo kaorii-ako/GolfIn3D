@@ -96,7 +96,7 @@ def analyze_swing(folder, lefty):
             continue
         side = json.loads(avi.with_suffix(".json").read_text())
         t = np.array(side["t"])
-        p2, pw = P.analyze(read_frames(avi), t)
+        p2, pw = P.analyze(read_frames(avi), t, side["size"][1])
         n = min(len(t), len(p2))
         data[f"{role}2d"], data[f"{role}w"], data[f"t_{role}"] = p2[:n], pw[:n], t[:n]
         sizes[role] = tuple(side["size"])
@@ -154,11 +154,12 @@ class LivePose(threading.Thread):
 
     def run(self):
         try:
-            tr = P.PoseTracker("lite")
+            tr = P.PoseTracker("full")
         except Exception as e:
             self.error = str(e)
             return
         last = None
+        kf = P.Kalman(66)
         while not self._halt.is_set():
             latest = self.cam.latest
             if not self.on or latest is None or latest[0] == last:
@@ -168,6 +169,11 @@ class LivePose(threading.Thread):
             s = min(1.0, 640 / f.shape[1])
             pts, _ = tr(cv2.resize(f, None, fx=s, fy=s) if s < 1 else f, last * 1000)
             pts[:, :2] /= s
+            # forward-only Kalman (the live view can't look ahead); swings get the zero-lag smoother
+            h, vis = f.shape[0], np.nan_to_num(pts[:, 2])
+            z = np.where(vis[:, None] >= P.MIN_VIS, pts[:, :2], np.nan).ravel()
+            r = np.repeat((P.KF_SIGMA * h / np.maximum(vis, P.MIN_VIS)) ** 2, 2)
+            pts[:, :2] = kf.step(last, z, r, np.repeat(P.KF_ACCEL * h, 2) ** 2).reshape(33, 2)
             self.pts = pts
         tr.close()
 
@@ -1310,11 +1316,12 @@ class Main(QMainWindow):
 
 
 def selftest():
-    """Packaged-build check: the bundled model loads and runs. Exit code 0 = ok."""
-    tr = P.PoseTracker("lite")
-    p2, _ = tr(np.zeros((240, 320, 3), np.uint8), 0)
-    tr.close()
-    assert p2.shape == (33, 3)
+    """Packaged-build check: the bundled models load and run. Exit code 0 = ok."""
+    for kind in ("full", "heavy"):
+        tr = P.PoseTracker(kind)
+        p2, _ = tr(np.zeros((240, 320, 3), np.uint8), 0)
+        tr.close()
+        assert p2.shape == (33, 3)
     cam = Camera(99)  # no such device: thread exits at once; join() must not raise (camera restart path)
     cam.start()
     cam.stop()
