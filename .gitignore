@@ -5,3 +5,4 @@ dist/
 golfin3d/models/
 .vercel
 .env*
+node_modules/

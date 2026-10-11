@@ -157,13 +157,6 @@ input[type=range]::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
 .window-bar { height: 34px; display: flex; gap: 7px; align-items: center; padding-inline: 14px; background: #121212; border-bottom: 1px solid var(--line); }
 .window-bar span { width: 11px; height: 11px; border-radius: 50%; background: #2c2c2e; }
 .caption { margin-top: 16px; text-align: center; font-size: 0.85rem; color: var(--text-3); }
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .tilt { animation: untilt linear both; animation-timeline: view(); animation-range: entry 0% cover 45%; transform-origin: 50% 100%; }
-    @keyframes untilt { from { transform: rotateX(18deg) scale(0.92); opacity: 0.5; } to { transform: none; opacity: 1; } }
-  }
-}
-
 /* facts */
 .facts { padding-block: 8px 0; }
 .facts-row { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--line); }
@@ -248,7 +241,7 @@ input[type=range]::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
 @media (max-width: 900px) { .limits-grid { grid-template-columns: 1fr; gap: 28px; } }
 
 /* download */
-.download .wrap { display: grid; justify-items: center; text-align: center; }
+.download .wrap { display: grid; grid-template-columns: minmax(0, 1fr); justify-items: center; text-align: center; }
 .download h2 { max-width: none; }
 .sub { margin-top: 14px; }
 .tabs {
@@ -274,14 +267,14 @@ input[type=range]::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
 }
 .tabs button[aria-selected=true] { color: var(--text); }
 .panes { width: min(640px, 100%); margin-top: 28px; }
-.pane { display: grid; justify-items: center; gap: 14px; }
+.pane { display: grid; grid-template-columns: minmax(0, 1fr); justify-items: center; gap: 14px; overflow-wrap: anywhere; }
 .pane[hidden] { display: none; }
 .file { font: 500 0.8rem/1.4 var(--mono); color: var(--text-3); }
 .steps { text-align: left; margin: 14px 0 0; padding: 22px 26px 22px 46px; display: grid; gap: 10px; border-radius: var(--r-surface); background: var(--surface); border: 1px solid var(--line); width: 100%; color: var(--text-2); font-size: 0.93rem; }
 .steps b { color: var(--text); font-weight: 600; }
 .steps a { color: var(--accent); }
 .code { display: flex; align-items: center; gap: 10px; width: 100%; text-align: left; padding: 12px 12px 12px 18px; border-radius: var(--r-media); background: #070807; border: 1px solid var(--line); }
-.code code { flex: 1; overflow-x: auto; white-space: nowrap; color: var(--text); scrollbar-width: none; }
+.code code { flex: 1; min-width: 0; overflow-x: auto; white-space: nowrap; color: var(--text); scrollbar-width: none; }
 .copy { flex: none; width: 44px; height: 44px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--text-2); cursor: pointer; display: grid; place-items: center; transition: transform 120ms var(--ease-out), color 150ms ease; }
 .copy:active { transform: scale(0.94); }
 .copy.done { color: var(--accent); }
@@ -310,13 +303,15 @@ details p { padding: 0 40px 24px 0; max-width: 62ch; }
 .footer nav a:hover { color: var(--text); }
 .footer .fine { margin: 0; }
 
-/* reveal on scroll: tells the eye what's new as it arrives, once */
-@media (prefers-reduced-motion: no-preference) {
-  .js .reveal { opacity: 0; transform: translateY(18px); transition: opacity 700ms var(--ease-out), transform 700ms var(--ease-out); transition-delay: calc(var(--d, 0) * 70ms); }
-  .js .reveal.in { opacity: 1; transform: none; }
-  .hero-copy > * { animation: rise 800ms var(--ease-out) both; }
-  .hero-copy > :nth-child(2) { animation-delay: 80ms; }
-  .hero-copy > :nth-child(3) { animation-delay: 160ms; }
-  .stage { animation: rise 900ms var(--ease-out) 120ms both; }
-  @keyframes rise { from { opacity: 0; transform: translateY(14px); } }
-}
+/* motion: initial states before GSAP takes over (see src/main.jsx). No .motion = static page. */
+.motion .reveal, .motion .hero-in { opacity: 0; transform: translateY(20px); }
+.motion .hero h1 { visibility: hidden; }
+.motion .hero h1 .split-word { visibility: visible; }
+.motion .tilt { transform: rotateX(18deg) scale(0.92); opacity: 0.5; transform-origin: 50% 100%; }
+
+/* React Bits SpotlightCard as an effect layer under each bento cell's content */
+.fx-root { display: contents; }
+.cell .cell-fx { position: absolute; inset: 0; padding: 0; border-radius: inherit; pointer-events: none; z-index: 0; }
+.cell > :not(.fx-root) { position: relative; z-index: 1; }
+.hero h1 .split-parent { overflow: visible !important; } /* React Bits clips; it would cut descenders at this line-height */
+.facts-row b span { font: inherit; color: inherit; letter-spacing: inherit; }

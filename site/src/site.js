@@ -1,5 +1,4 @@
-// GolfIn3D site: interactive 3D swing, OS-aware downloads, tabs, copy, reveal.
-document.documentElement.classList.add("js");
+// GolfIn3D site: interactive 3D swing, OS-aware downloads, tabs, copy.
 const REPO = "kaorii-ako/GolfIn3D";
 const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -64,16 +63,6 @@ document.querySelectorAll(".copy").forEach((b) =>
     } catch { /* clipboard blocked: the text is still selectable */ }
   })
 );
-
-/* ------------------------------------------------------------ reveal */
-const io = new IntersectionObserver((entries) => {
-  for (const e of entries) if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
-}, { rootMargin: "0px 0px -10% 0px" });
-document.querySelectorAll(".reveal").forEach((el) => {
-  const sibs = [...el.parentElement.children].filter((c) => c.classList.contains("reveal"));
-  el.style.setProperty("--d", Math.min(sibs.indexOf(el), 5));
-  io.observe(el);
-});
 
 /* ------------------------------------------------------------ 3D swing */
 // A parametric golfer (metres, y up, facing +z, target at +x). Same projection and

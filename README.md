@@ -47,7 +47,7 @@ The builds are unsigned, so expect a SmartScreen or Gatekeeper prompt on first l
 
 ## Release a new version
 
-Bump `version` in `pyproject.toml`, then `git tag vX.Y.Z && git push --tags`. `.github/workflows/release.yml` builds and self-tests the three installers, then publishes them as a GitHub Release. The website (`site/`) deploys to GitHub Pages via `.github/workflows/pages.yml`.
+Bump `version` in `pyproject.toml`, then `git tag vX.Y.Z && git push --tags`. `.github/workflows/release.yml` builds and self-tests the three installers, then publishes them as a GitHub Release. The website (`site/`, Vite + React islands: GSAP, Lenis, React Bits) deploys to Vercel and GitHub Pages on every push to `main`. Local preview: `cd site && npm i && npm run dev`.
 
 To build locally: put the two pose model files in `golfin3d/models/`, then run `uv sync --group dev && uv run pyinstaller GolfIn3D.spec`. After that, run `packaging/appimage.sh` (Linux), `packaging/dmg.sh` (macOS) or `iscc packaging\windows.iss` (Windows).
 

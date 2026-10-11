@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#0b0c0b">
 <meta property="og:title" content="GolfIn3D">
 <meta property="og:description" content="Every swing, in three dimensions. Two-camera capture, 2D and 3D pose, synced to your launch monitor.">
-<meta property="og:image" content="img/shot-swing.png">
+<meta property="og:image" content="https://golfin3d.vercel.app/og.png">
 <link rel="icon" href="img/favicon.png">
 <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
@@ -18,6 +18,14 @@
 <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
 <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
 <link rel="stylesheet" href="style.css">
+<script>
+  // .motion hides animated elements before first paint; dropped if the motion bundle never runs
+  document.documentElement.classList.add("js");
+  if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    document.documentElement.classList.add("motion");
+    setTimeout(() => { if (!window.__motionReady) document.documentElement.classList.remove("motion"); }, 3000);
+  }
+</script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -46,13 +54,13 @@
     <div class="wrap hero-grid">
       <div class="hero-copy">
         <h1>Every swing, in three dimensions.</h1>
-        <p class="lede">Two cameras and your Foresight GC3. GolfIn3D captures each shot, tracks the body, and rebuilds the swing in 3D.</p>
-        <div class="cta-row">
+        <p class="lede hero-in">Two cameras and your Foresight GC3. GolfIn3D captures each shot, tracks the body, and rebuilds the swing in 3D.</p>
+        <div class="cta-row hero-in">
           <a class="btn btn-primary btn-lg" id="hero-dl" href="#download"><i aria-hidden="true" class="ph ph-download-simple"></i><span>Download</span></a>
           <a class="btn btn-ghost btn-lg" href="https://github.com/kaorii-ako/GolfIn3D"><i aria-hidden="true" class="ph ph-github-logo"></i><span>View Source</span></a>
         </div>
       </div>
-      <figure class="stage" aria-label="Interactive 3D swing. Drag to orbit.">
+      <figure class="stage hero-in" aria-label="Interactive 3D swing. Drag to orbit.">
         <canvas id="swing3d" tabindex="0" aria-label="3D swing. Drag or use the arrow keys to rotate."></canvas>
         <div class="stage-hud">
           <span id="hud-phase">Address</span>
@@ -284,6 +292,6 @@
 </footer>
 
 <p id="sr-status" class="sr-only" aria-live="polite"></p>
-<script src="app.js" defer></script>
+<script type="module" src="/src/main.jsx"></script>
 </body>
 </html>
