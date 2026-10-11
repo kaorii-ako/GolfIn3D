@@ -889,9 +889,10 @@ class SetupPage(QScrollArea):
         port_apply.clicked.connect(lambda: (s.setValue("port", self.port.value()), win.start_gc3()))
         g2 = form(("Listen port", self.port), ("Shot data delay", self.gc3_lat))
         lm = card(label("Foresight GC3", "h2"), g2, self.gc3_state,
-                  label("In FSX Play, turn on the GSPro connection and point it at this computer on the port above "
-                        "(GolfIn3D speaks the GSPro OpenConnect protocol). Don't run GSPro on the same port at the same time. "
-                        "Shot data delay is how long after impact FSX reports the shot; used only when the mic didn't catch the impact. "
+                  label("GolfIn3D receives shots over the GSPro OpenConnect protocol on the port above, from any connector that "
+                        "sends it. FSX Play does not send shot data to other apps, so with a GC3 on FSX Play swings are captured "
+                        "by the mic without ball numbers. Don't run GSPro on the same port at the same time. "
+                        "Shot data delay is how long after impact a shot arrives; used only when the mic didn't catch the impact. "
                         "On macOS/Linux, ports below 1024 need admin rights.",
                         "faint"), row(None, port_apply))
 

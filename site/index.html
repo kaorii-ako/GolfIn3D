@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>GolfIn3D: two-camera swing capture with 3D pose</title>
-<meta name="description" content="Two cameras and your Foresight GC3. GolfIn3D captures every shot, tracks the body, and rebuilds the swing in 3D. Free for Windows, macOS and Linux.">
+<meta name="description" content="Two USB cameras and a mic. GolfIn3D captures every shot, tracks the body, and rebuilds the swing in 3D. Free for Windows, macOS and Linux.">
 <meta name="theme-color" content="#0b0c0b">
 <meta property="og:title" content="GolfIn3D">
 <meta property="og:description" content="Every swing, in three dimensions. Two-camera capture, 2D and 3D pose, synced to your launch monitor.">
@@ -54,7 +54,7 @@
     <div class="wrap hero-grid">
       <div class="hero-copy">
         <h1>Every swing, in three dimensions.</h1>
-        <p class="lede hero-in">Two cameras and your Foresight GC3. GolfIn3D captures each shot, tracks the body, and rebuilds the swing in 3D.</p>
+        <p class="lede hero-in">Two USB cameras and a mic. GolfIn3D captures each shot, tracks the body, and rebuilds the swing in 3D.</p>
         <div class="cta-row hero-in">
           <a class="btn btn-primary btn-lg" id="hero-dl" href="#download"><i aria-hidden="true" class="ph ph-download-simple"></i><span>Download</span></a>
           <a class="btn btn-ghost btn-lg" href="https://github.com/kaorii-ako/GolfIn3D"><i aria-hidden="true" class="ph ph-github-logo"></i><span>View Source</span></a>
@@ -101,13 +101,13 @@
         <article class="cell cell-capture reveal">
           <div class="cell-text">
             <h3>Hit a ball. It's already saved.</h3>
-            <p>A mic hears impact to the millisecond. The GC3 adds ball speed, spin and launch a moment later. No buttons between shots.</p>
+            <p>A mic hears impact to the millisecond. A connected launch monitor adds ball speed, spin and launch a moment later. No buttons between shots.</p>
           </div>
           <div class="pulse" aria-hidden="true">
             <div class="wave"></div>
             <div class="pulse-row"><span>Impact</span><b>0&nbsp;ms</b></div>
             <div class="pulse-row"><span>Clip saved</span><b>2&nbsp;s before, 1&nbsp;s after</b></div>
-            <div class="pulse-row"><span>GC3 data attached</span><b>154.6&nbsp;mph</b></div>
+            <div class="pulse-row"><span>Shot data attached</span><b>154.6&nbsp;mph</b></div>
           </div>
         </article>
         <article class="cell cell-3d reveal">
@@ -154,8 +154,8 @@
         </li>
         <li class="reveal">
           <i aria-hidden="true" class="ph ph-plugs-connected"></i>
-          <h3>Connect the GC3</h3>
-          <p>Turn on FSX Play's GSPro connection and point it at GolfIn3D. Shot data flows in automatically.</p>
+          <h3>Set the impact mic</h3>
+          <p>Put a mic near the mat and drag the threshold above room noise. Every strike now saves a clip.</p>
         </li>
         <li class="reveal">
           <i aria-hidden="true" class="ph ph-crosshair"></i>
@@ -187,7 +187,11 @@
       <div class="limits-grid">
         <div class="reveal">
           <h3>Installers are unsigned</h3>
-          <p>Windows SmartScreen and macOS Gatekeeper will warn on first launch. The download section shows how to open it anyway.</p>
+          <p>Windows SmartScreen and macOS Gatekeeper will warn on first launch. The Mac build is Apple silicon only; Intel Macs can run from source.</p>
+        </div>
+        <div class="reveal">
+          <h3>No GC3 numbers next to FSX Play</h3>
+          <p>FSX Play doesn't share shot data with other apps. With a GC3 on FSX Play, swings are captured by the mic without ball numbers.</p>
         </div>
         <div class="reveal">
           <h3>Body only, no club tracking</h3>
@@ -200,10 +204,6 @@
         <div class="reveal">
           <h3>Webcam-level sync</h3>
           <p>Frames are timestamped on arrival. Fine for coaching, not for sub-millisecond biomechanics research.</p>
-        </div>
-        <div class="reveal">
-          <h3>macOS build is Apple silicon</h3>
-          <p>Intel Macs can run from source. Port 921 needs admin rights on macOS and Linux.</p>
         </div>
         <div class="reveal">
           <h3>Tested synthetically so far</h3>
@@ -229,7 +229,7 @@
           <p class="file">GolfIn3D-Setup-Windows-x64.exe · Windows 10 or 11, 64-bit</p>
           <ol class="steps">
             <li>Run the installer. If SmartScreen appears, choose <b>More info</b>, then <b>Run anyway</b>.</li>
-            <li>The installer adds a firewall rule so FSX Play can reach GolfIn3D on your network.</li>
+            <li>The installer adds a firewall rule so launch monitor connectors can reach GolfIn3D on your network.</li>
             <li>Open <b>Setup</b> in the app and assign your two cameras.</li>
           </ol>
         </div>
@@ -268,8 +268,8 @@
       <h2 class="reveal">Questions</h2>
       <div class="faq-list">
         <details class="reveal"><summary>Does it work without a GC3?</summary><p>Yes. The impact microphone triggers capture on its own, and you can press C to save the last few seconds by hand. You just won't get ball and club numbers next to the swing.</p></details>
-        <details class="reveal"><summary>Which launch monitors are supported?</summary><p>Anything that can send shots over the GSPro OpenConnect protocol. That includes the Foresight GC3 through FSX Play, and many other monitors through their GSPro connectors.</p></details>
-        <details class="reveal"><summary>Can I keep using GSPro or FSX while it runs?</summary><p>FSX keeps running normally. GSPro can't listen on the same port at the same time, so run GolfIn3D on port 921 or GSPro, not both.</p></details>
+        <details class="reveal"><summary>Which launch monitors are supported?</summary><p>Anything that can send shots over the GSPro OpenConnect protocol. FSX Play can't share shots with other apps, so a GC3 running on FSX Play doesn't send its numbers to GolfIn3D yet. Capture still works through the mic.</p></details>
+        <details class="reveal"><summary>Can I keep using GSPro or FSX while it runs?</summary><p>Yes, FSX keeps running normally. GSPro can't listen on the same port at the same time, so run GolfIn3D on port 921 or GSPro, not both.</p></details>
         <details class="reveal"><summary>What cameras should I buy?</summary><p>Any UVC USB camera works. For crisp impact frames, pick one that does 120 fps or more with a global shutter, and light the bay well.</p></details>
         <details class="reveal"><summary>Where do my swings go?</summary><p>Into a GolfIn3D folder in your home directory: two video files, the pose data and a small JSON file per swing. Nothing leaves your computer.</p></details>
         <details class="reveal"><summary>How accurate is the 3D?</summary><p>It depends mostly on calibration. Setup shows the reprojection error; under 1 px is good. Without calibration it falls back to single-camera 3D, which shows the shape of the swing but shouldn't be trusted for exact numbers.</p></details>

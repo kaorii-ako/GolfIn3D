@@ -18,7 +18,7 @@ On first launch it downloads the MediaPipe pose models (~40 MB) into `~/GolfIn3D
 ## Studio setup
 
 1. **Setup → Cameras.** Assign *Face-on* and *Down the line*, then press **Apply**. The real fps shows on each Live tile. For sharp slow-mo at impact, use 120 fps or faster with bright lighting.
-2. **Setup → Foresight GC3.** In FSX Play, turn on the **GSPro connection** and point it at this PC. GolfIn3D listens with the GSPro OpenConnect protocol on port 921. Don't run GSPro on the same port at the same time. The pill in the top right turns green when FSX connects.
+2. **Setup → Foresight GC3.** GolfIn3D listens for shots with the GSPro OpenConnect protocol on port 921. FSX Play doesn't send shot data to other apps, so with a GC3 on FSX Play, swings are captured by the mic but without ball numbers. Don't run GSPro on the same port at the same time. The pill in the top right turns green when a connector connects.
 3. **Setup → Impact microphone.** Put a mic near the mat. Drag the white mark so room noise stays below it and a strike goes above it. The mic gives the exact moment of impact, and the GC3 adds its numbers a moment later. If the mic misses a shot, the GC3 shot still triggers a capture, using **Shot data delay** to estimate the impact time.
 4. **Setup → 3D calibration** (once, and again whenever a camera moves). Print a checkerboard, enter its inner-corner count and square size, press **Start calibration**, and move the board slowly through the hitting area so both cameras see it. Until you calibrate, 3D comes from the face-on camera alone and is less accurate.
 
@@ -53,6 +53,6 @@ To build locally: put the two pose model files in `golfin3d/models/`, then run `
 
 ## Known limits
 
-- Port 921 is privileged on macOS and Linux. Run with admin rights, or change the port on both sides. FSX Play itself is Windows-only, so the usual setup is everything on the studio Windows PC.
+- Port 921 is privileged on macOS and Linux. Run with admin rights, or change the port on both sides. - No GC3 numbers alongside FSX Play yet: Foresight has no public way for other apps to read shots from FSX Play or the GC3.
 - Cameras are timestamped when each frame arrives. That's fine for plain USB webcams. For sub-millisecond sync you'd need hardware-triggered cameras.
 - Pose runs on the CPU. Analysing a 3-second, two-camera, 120 fps swing takes about 30 s with the most accurate (heavy) model, and the swing card shows *Analyzing…* until it's done.

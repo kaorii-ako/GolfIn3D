@@ -8,9 +8,9 @@ import numpy as np
 
 
 class OpenConnectServer(threading.Thread):
-    """Pretends to be GSPro: FSX Play (or any OpenConnect connector) connects here and sends
+    """Pretends to be GSPro: any OpenConnect connector connects here and sends
     shot JSON. Calls on_shot(shot_dict, t_received) for real shots, on_status(text) otherwise.
-    Point FSX Play's GSPro connection at this PC and port (default 921)."""
+    Point the connector at this PC and port (default 921). FSX Play has no such output."""
 
     def __init__(self, on_shot, on_status, port=921):
         super().__init__(daemon=True)
@@ -23,7 +23,7 @@ class OpenConnectServer(threading.Thread):
         except OSError as e:
             self.on_status(f"GC3 port {self.port} unavailable: {e.strerror}")
             return
-        self.on_status(f"Waiting for FSX on :{self.port}")
+        self.on_status(f"Waiting for shots on :{self.port}")
         while True:
             try:
                 conn, addr = self._sock.accept()
@@ -52,7 +52,7 @@ class OpenConnectServer(threading.Thread):
                         break
                     buf = buf[end:]
                     self._handle(conn, msg, time.monotonic())
-        self.on_status(f"Waiting for FSX on :{self.port}")
+        self.on_status(f"Waiting for shots on :{self.port}")
 
     def _handle(self, conn, msg, t):
         opts = msg.get("ShotDataOptions", {})
